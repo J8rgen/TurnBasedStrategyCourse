@@ -19,8 +19,9 @@ public class MouseWorld : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, instance.mousePlaneLayerMask); // current instance (private mousePlaneLayerMask)
-        // "out" writes to "RaycastHit reaycastHit" variable instead
-        // Added a layer to Plane on GameScene called "M
+                                                                                                       // "out" writes to "RaycastHit reaycastHit" variable instead
+                                                                                                       // Added a layer to Plane on GameScene called "M
+
 
         return raycastHit.point;
 

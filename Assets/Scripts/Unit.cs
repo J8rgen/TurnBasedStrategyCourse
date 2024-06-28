@@ -10,6 +10,11 @@ public class Unit : MonoBehaviour {
 
     private Vector3 targetPosition;
 
+    private void Awake() {
+        targetPosition = transform.position;  // so units dont move from current position to 0 0 0 on start (set it to current position)
+    }
+
+
     private void Update() {
 
 
@@ -21,6 +26,11 @@ public class Unit : MonoBehaviour {
             float moveSpeed = 4f;
             transform.position += moveDirection * moveSpeed * Time.deltaTime; // framerate independent
 
+            float rotateSpeed = 10f; // unit rotate
+            transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime); 
+            // unit rotation for movement, lerp for smoothing rotation
+
+
             unitAnimator.SetBool("IsWalking", true); // set animation
         }
         else {
@@ -28,15 +38,13 @@ public class Unit : MonoBehaviour {
         }
 
 
-        if (Input.GetMouseButtonDown(0)) {  // left click [0]; right [1]; and so on
-            Move(MouseWorld.GetPosition());
-        }
+        
 
 
     }
 
 
-    private void Move(Vector3 targetPosition) {
+    public void Move(Vector3 targetPosition) {
         this.targetPosition = targetPosition; // this object (the unit)
     }
 
