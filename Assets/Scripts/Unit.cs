@@ -18,8 +18,8 @@ public class Unit : MonoBehaviour {
         }
 
 
-        if (Input.GetKeyDown(KeyCode.T)) { // test move
-            Move(new Vector3(4, 0, 4));
+        if (Input.GetMouseButtonDown(0)) {  // left click [0]; right [1]; and so on
+            Move(MouseWorld.GetPosition());
         }
 
 
