@@ -54,10 +54,25 @@ public class LevelGrid : MonoBehaviour {
     }
 
 
-    // Convert world position to grid position
+    // Passthrough functions from GridSystem
     public GridPosition GetGridPosition(Vector3 worldPosition) => gridSystem.GetGridPosition(worldPosition);
     // Short for closing brackets Lambda expression  Same as:
     // public GridPosition GetGridPosition(Vector3 worldPosition){ return gridSystem.GetGridPosition(worldPosition); }
+
+    public bool isValidGridPosition(GridPosition gridPosition) => gridSystem.isValidGridPosition(gridPosition); // Lambda expression 
+
+    public Vector3 GetWorldPosition(GridPosition gridPosition) => gridSystem.GetWorldPosition(gridPosition);
+
+    public int GetWidth() => gridSystem.GetWidth();
+    public int GetHeight() => gridSystem.GetHeight();
+
+    public bool HasAnyUnitOnGridPosition(GridPosition gridPosition) {
+
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        return gridObject.HasAnyUnit();
+    }
+
+
 
 
 }
