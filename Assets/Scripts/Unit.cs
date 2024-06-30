@@ -8,9 +8,12 @@ public class Unit : MonoBehaviour {
     private MoveAction moveAction;
     private SpinAction spinAction;
 
+    private BaseAction[] baseActionArray;
+
     private void Awake() {
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
+        baseActionArray = GetComponents<BaseAction>(); // includes all actions
     }
     private void Start() {
         // Get initial grid position and add unit to grid
@@ -41,6 +44,8 @@ public class Unit : MonoBehaviour {
         return gridPosition; 
     }
 
-
+    public BaseAction[] GetBaseActionArray() { // can get the array for selected unit actions
+        return baseActionArray;
+    }
 
 }

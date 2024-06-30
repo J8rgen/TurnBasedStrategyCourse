@@ -7,7 +7,7 @@ public class SpinAction : BaseAction {
 
     private float totalSpinAmount;
 
-    
+
 
     private void Update() {
         if (!isActive) {
@@ -24,7 +24,7 @@ public class SpinAction : BaseAction {
         }
     }
 
-    public void Spin(Action onActionComplete) {
+    public override void TakeAction(GridPosition gridPosition, Action onActionComplete) { // gridposition not used, match BaseAction
         this.onActionComplete = onActionComplete;
         isActive = true;
         totalSpinAmount = 0;
@@ -32,10 +32,15 @@ public class SpinAction : BaseAction {
     }
 
 
+    public override string GetActionName() {
+        return "Spin";
+    }
 
+    public override List<GridPosition> GetValidActionGridPositionList() {
+        GridPosition unitGridPosition = unit.GetGridPosition();
 
-
-
-
-
+        return new List<GridPosition> {
+            unitGridPosition
+        };
+    }
 }
