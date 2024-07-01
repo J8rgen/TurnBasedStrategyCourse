@@ -11,6 +11,10 @@ public class UnitActionSystem : MonoBehaviour {
 
 
     public event EventHandler OnSelectedUnitChanged;
+    public event EventHandler OnSelectedActionChanged;
+    public event EventHandler<bool> OnBusyChanged; // generics, passing a bool
+
+    public event EventHandler OnActionStarted; // for Actionpoints
 
     [SerializeField] private Unit selectedUnit;
     [SerializeField] private LayerMask unitLayerMask;
@@ -54,20 +58,29 @@ public class UnitActionSystem : MonoBehaviour {
 
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition()); // mouseGridposition
 
-            if (selectedAction.IsValidActionGridPosition(mouseGridPosition)){
-                SetBusy();
-                selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+            if (!selectedAction.IsValidActionGridPosition(mouseGridPosition)) { // clicking the right grid for action
+                return;
             }
+            if (!selectedUnit.TrySpendActionPointsToTakeAction(selectedAction)) { // has enough actionPonts for action
+                return;
+            }
+            SetBusy();
+            selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+            OnActionStarted?.Invoke(this, EventArgs.Empty); // for Actionpoints
         }
     }
 
 
     private void SetBusy() { // when a action is in progress set
         isBusy = true;
+
+        OnBusyChanged?.Invoke(this, isBusy); // pass the boolean
     }
 
     private void ClearBusy() { // when a action is in progress clear
         isBusy = false;
+
+        OnBusyChanged?.Invoke(this, isBusy); // pass the boolean
     }
 
 
@@ -100,6 +113,8 @@ public class UnitActionSystem : MonoBehaviour {
 
     public void SetSelectedAction(BaseAction baseAction) {
         selectedAction = baseAction;
+
+        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
     }
 
 
@@ -119,5 +134,7 @@ public class UnitActionSystem : MonoBehaviour {
     public BaseAction GetSelectedAction() {
         return selectedAction;
     }
+
+    
 
 }

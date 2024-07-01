@@ -40,6 +40,7 @@ public class MoveAction : BaseAction {
         else {
             unitAnimator.SetBool("IsWalking", false); // Stop walking animation
             isActive = false;
+            onActionComplete();
         }
 
         float rotateSpeed = 10f; // Unit Rotation speed
@@ -54,7 +55,6 @@ public class MoveAction : BaseAction {
         this.onActionComplete = onActionComplete;
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition); // this object (the unit)
         isActive = true;
-        onActionComplete();
     }
 
 

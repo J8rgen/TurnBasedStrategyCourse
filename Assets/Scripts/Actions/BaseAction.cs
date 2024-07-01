@@ -15,7 +15,7 @@ public abstract class BaseAction : MonoBehaviour {
     // private SpinCompleteDelegate onSpinComplete;
 
 
-    protected virtual void Awake() { // virtual - child classes can override
+    protected virtual void Awake() { // virtual - child classes can override, (virtual default)
         unit = GetComponent<Unit>();
     }
 
@@ -30,5 +30,11 @@ public abstract class BaseAction : MonoBehaviour {
     }
 
     public abstract List<GridPosition> GetValidActionGridPositionList();
+
+
+    public virtual int GetActionPointsCost() { // default can be overriden
+        return 1;
+    }
+
 
 }
