@@ -32,9 +32,18 @@ public abstract class BaseAction : MonoBehaviour {
     public abstract List<GridPosition> GetValidActionGridPositionList();
 
 
-    public virtual int GetActionPointsCost() { // default can be overriden
+    public virtual int GetActionPointsCost() { // default can be override
         return 1;
     }
 
 
+    protected void ActionStart(Action onActionComplete) {
+        isActive = true;
+        this.onActionComplete = onActionComplete;
+    }
+
+    protected void ActionComplete() {
+        isActive = false;
+        onActionComplete();
+    }
 }

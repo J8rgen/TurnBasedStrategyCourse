@@ -46,5 +46,15 @@ public class GridObject {
         return unitList.Count > 0;
     }
 
+    public Unit GetUnit() {
+        if (HasAnyUnit()) {
+            return unitList[0]; // if any unit pass the first one from the list (never multiple)
+        }
+        else { 
+            return null; 
+        }
+    }
+
+
 }
 

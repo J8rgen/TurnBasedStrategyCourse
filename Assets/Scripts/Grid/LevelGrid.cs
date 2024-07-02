@@ -54,7 +54,7 @@ public class LevelGrid : MonoBehaviour {
     }
 
 
-    // Passthrough functions from GridSystem
+    // Pass through functions from GridSystem
     public GridPosition GetGridPosition(Vector3 worldPosition) => gridSystem.GetGridPosition(worldPosition);
     // Short for closing brackets Lambda expression  Same as:
     // public GridPosition GetGridPosition(Vector3 worldPosition){ return gridSystem.GetGridPosition(worldPosition); }
@@ -66,13 +66,17 @@ public class LevelGrid : MonoBehaviour {
     public int GetWidth() => gridSystem.GetWidth();
     public int GetHeight() => gridSystem.GetHeight();
 
-    public bool HasAnyUnitOnGridPosition(GridPosition gridPosition) {
+    public bool HasAnyUnitOnGridPosition(GridPosition gridPosition) { 
 
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         return gridObject.HasAnyUnit();
     }
 
+    public Unit GetUnitAtGridPosition(GridPosition gridPosition) {
 
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        return gridObject.GetUnit();
+    }
 
 
 }

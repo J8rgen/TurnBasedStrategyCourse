@@ -11,6 +11,8 @@ public class TurnSystem : MonoBehaviour {
     // this makes the script run order important, Unit script must be updated first. could change script execution order in project settings
 
     private int turnNumber = 1;
+    private bool isPlayerTurn = true;
+
     private void Awake() {
         if (Instance != null) {
             Debug.LogError("There is more than one TurnSystem!" + transform + " - " + Instance);
@@ -23,6 +25,7 @@ public class TurnSystem : MonoBehaviour {
 
     public void NextTurn() {
         turnNumber++;
+        isPlayerTurn = !isPlayerTurn;
         OnTurnChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -30,7 +33,9 @@ public class TurnSystem : MonoBehaviour {
         return turnNumber;
     }
 
-
+    public bool IsPlayerTurn() {
+        return isPlayerTurn;
+    }
 
 
 }

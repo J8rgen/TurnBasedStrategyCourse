@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class MoveAction : BaseAction {
 
     [SerializeField] private Animator unitAnimator; // Animator component for unit animations (object with visual, animator)
-    [SerializeField] private int maxMoveDistance = 4;
+    [SerializeField] private int maxMoveDistance = 5;
 
     //private const string IS_WALKING = "IsWalking";
 
@@ -39,8 +39,7 @@ public class MoveAction : BaseAction {
         }
         else {
             unitAnimator.SetBool("IsWalking", false); // Stop walking animation
-            isActive = false;
-            onActionComplete();
+            ActionComplete();
         }
 
         float rotateSpeed = 10f; // Unit Rotation speed
@@ -52,9 +51,9 @@ public class MoveAction : BaseAction {
 
     // Method to set a new target position for the unit
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete) {
-        this.onActionComplete = onActionComplete;
+        ActionStart(onActionComplete);
+
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition); // this object (the unit)
-        isActive = true;
     }
 
 
@@ -75,8 +74,17 @@ public class MoveAction : BaseAction {
                     // is in grid bounds
                     continue;
                 }
+
+
+                // change the area to not be a square
+                int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+                if (testDistance > maxMoveDistance) {
+                    continue;
+                }
+
+
                 if (unitGridPosition == testGridPosition) {
-                    // Same gridposition where the unit is already at
+                    // Same grid position where the unit is already at
                     continue;
                 }
                 if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) {

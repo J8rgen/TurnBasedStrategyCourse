@@ -7,17 +7,19 @@ using System;
 public class Unit : MonoBehaviour {
 
     private const int ACTION_POINTS_MAX = 4;
-
     private int actionPoints = ACTION_POINTS_MAX; // points the unit has
 
     private GridPosition gridPosition; // Current grid position of the unit
+
     private MoveAction moveAction;
     private SpinAction spinAction;
-
     private BaseAction[] baseActionArray;
 
 
     public static event EventHandler OnAnyActionPointsChanged; // gets fired when any instance of this class does something
+
+    [SerializeField] private bool isEnemy;
+
 
 
     private void Awake() {
@@ -33,7 +35,6 @@ public class Unit : MonoBehaviour {
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
     }
 
-    
 
     private void Update() {
         // Update grid position if the unit has moved to a new grid cell
@@ -57,6 +58,13 @@ public class Unit : MonoBehaviour {
     public GridPosition GetGridPosition() { 
         return gridPosition; 
     }
+
+
+    public Vector3 GetWorldPosition() {
+        return transform.position;
+    }
+
+
 
     public BaseAction[] GetBaseActionArray() { // can get the array for selected unit actions
         return baseActionArray;
@@ -95,9 +103,23 @@ public class Unit : MonoBehaviour {
 
 
     private void TurnSystem_OnTurnChanged(object sender, System.EventArgs e) {
+        if ( (IsEnemy() && !TurnSystem.Instance.IsPlayerTurn()) || (!IsEnemy() && TurnSystem.Instance.IsPlayerTurn()) ) {
+        // if enemy and enemy turn   or   if player and player turn    ->    then refresh
+        
         actionPoints = ACTION_POINTS_MAX;
 
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+    }
+
+    public bool IsEnemy() {
+        return isEnemy;
+    }
+
+
+    public void Damage() {
+        Debug.Log(transform + " damaged!");
     }
 
 }

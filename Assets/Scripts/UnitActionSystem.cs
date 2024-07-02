@@ -42,6 +42,10 @@ public class UnitActionSystem : MonoBehaviour {
             return;
         }
 
+        if(!TurnSystem.Instance.IsPlayerTurn()) { // enemy turn
+            return;
+        }
+
         if (EventSystem.current.IsPointerOverGameObject()) {
             return;
         }
@@ -102,6 +106,12 @@ public class UnitActionSystem : MonoBehaviour {
                         // Unit is alreay selected
                         return false;
                     }
+
+                    if (unit.IsEnemy()) {
+                        // clicked on an enemy
+                        return false;
+                    }
+
                     SetSelectedUnit(unit); //if found "out Unit unit", set it
                     return true;
                 }
