@@ -16,7 +16,8 @@ public class Unit : MonoBehaviour {
     private BaseAction[] baseActionArray;
 
 
-    public static event EventHandler OnAnyActionPointsChanged; // gets fired when any instance of this class does something
+    // gets fired when any instance of this class does something
+    public static event EventHandler OnAnyActionPointsChanged; 
 
     [SerializeField] private bool isEnemy;
 

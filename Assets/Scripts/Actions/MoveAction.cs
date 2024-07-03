@@ -6,8 +6,10 @@ using UnityEngine.EventSystems;
 
 public class MoveAction : BaseAction {
 
-    [SerializeField] private Animator unitAnimator; // Animator component for unit animations (object with visual, animator)
-    [SerializeField] private int maxMoveDistance = 5;
+    public event EventHandler OnStartMoving;
+    public event EventHandler OnStopMoving;
+
+    [SerializeField] private int maxMoveDistance = 4;
 
     //private const string IS_WALKING = "IsWalking";
 
@@ -30,15 +32,12 @@ public class MoveAction : BaseAction {
         // Move the unit towards the target position
         if (Vector3.Distance(transform.position, targetPosition) > stoppingDistance) {
 
-            
             float moveSpeed = 4f;
             transform.position += moveDirection * moveSpeed * Time.deltaTime; // framerate independent
 
-
-            unitAnimator.SetBool("IsWalking", true); // Set walking animation
         }
         else {
-            unitAnimator.SetBool("IsWalking", false); // Stop walking animation
+            OnStopMoving?.Invoke(this, EventArgs.Empty);
             ActionComplete();
         }
 
@@ -54,6 +53,8 @@ public class MoveAction : BaseAction {
         ActionStart(onActionComplete);
 
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition); // this object (the unit)
+
+        OnStartMoving?.Invoke(this, EventArgs.Empty);
     }
 
 
@@ -77,10 +78,10 @@ public class MoveAction : BaseAction {
 
 
                 // change the area to not be a square
-                int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
-                if (testDistance > maxMoveDistance) {
-                    continue;
-                }
+                //int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+                //if (testDistance > maxMoveDistance) {
+                //    continue;
+                //}
 
 
                 if (unitGridPosition == testGridPosition) {
