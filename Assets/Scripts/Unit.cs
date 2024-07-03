@@ -21,7 +21,7 @@ public class Unit : MonoBehaviour {
 
 
     // gets fired when any instance of this class does something
-    public static event EventHandler OnAnyActionPointsChanged; 
+    public static event EventHandler OnAnyActionPointsChanged; // static - for whole class
 
 
 
