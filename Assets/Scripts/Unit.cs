@@ -6,6 +6,8 @@ using System;
 
 public class Unit : MonoBehaviour {
 
+    [SerializeField] private bool isEnemy;
+
     private const int ACTION_POINTS_MAX = 4;
     private int actionPoints = ACTION_POINTS_MAX; // points the unit has
 
@@ -15,15 +17,17 @@ public class Unit : MonoBehaviour {
     private SpinAction spinAction;
     private BaseAction[] baseActionArray;
 
+    private HealthSystem healthSystem;
+
 
     // gets fired when any instance of this class does something
     public static event EventHandler OnAnyActionPointsChanged; 
 
-    [SerializeField] private bool isEnemy;
 
 
 
     private void Awake() {
+        healthSystem = GetComponent<HealthSystem>();
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
         baseActionArray = GetComponents<BaseAction>(); // includes all actions
@@ -34,8 +38,10 @@ public class Unit : MonoBehaviour {
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this); // this = unit
 
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        healthSystem.OnDead += HealthSystem_OnDead;
     }
 
+    
 
     private void Update() {
         // Update grid position if the unit has moved to a new grid cell
@@ -119,8 +125,13 @@ public class Unit : MonoBehaviour {
     }
 
 
-    public void Damage() {
-        Debug.Log(transform + " damaged!");
+    public void Damage(int damageAmount) { // took damage
+        healthSystem.Damage(damageAmount);
     }
 
+    private void HealthSystem_OnDead(object sender, EventArgs e) {
+        LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this); // remove the unit from grid position
+        Destroy(gameObject);
+        // also had to unsubscribe to the UnitActionSystem_OnSelectedUnitChanged; event on UnitSelectedVisual.cs
+    }
 }
