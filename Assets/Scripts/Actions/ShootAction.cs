@@ -133,7 +133,7 @@ public class ShootAction : BaseAction {
     }
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete) {
-        ActionStart(onActionComplete);
+        
 
         targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
 
@@ -143,5 +143,18 @@ public class ShootAction : BaseAction {
         stateTimer = aimingStateTime;
 
         canShootBullet = true;
+
+        ActionStart(onActionComplete); // important for this to be at the end for camera
+    }
+
+
+
+
+    public Unit GetTargetUnit() {
+        return targetUnit;
+    }
+
+    public int GetMaxShootDistance() {
+        return maxShootDistance;
     }
 }

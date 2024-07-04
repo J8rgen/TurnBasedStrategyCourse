@@ -11,11 +11,11 @@ public class Testing : MonoBehaviour {
 
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.T)) {
-            GridSystemVisual.Instance.HideAllGridPosition();
-            GridSystemVisual.Instance.ShowAllGridPositionList(unit.GetMoveAction().GetValidActionGridPositionList());
-        }
-    }
+    //private void Update() {
+    //    if (Input.GetKeyDown(KeyCode.T)) {
+    //        GridSystemVisual.Instance.HideAllGridPosition();
+    //        GridSystemVisual.Instance.ShowAllGridPositionList(unit.GetMoveAction().GetValidActionGridPositionList());
+    //    }
+    //}
     
 }

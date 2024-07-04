@@ -50,11 +50,12 @@ public class MoveAction : BaseAction {
 
     // Method to set a new target position for the unit
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete) {
-        ActionStart(onActionComplete);
 
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition); // this object (the unit)
 
         OnStartMoving?.Invoke(this, EventArgs.Empty);
+
+        ActionStart(onActionComplete); // must be at the end of the function for camera
     }
 
 

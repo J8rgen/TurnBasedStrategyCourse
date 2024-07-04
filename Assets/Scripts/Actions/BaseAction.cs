@@ -6,6 +6,11 @@ using UnityEngine;
 public abstract class BaseAction : MonoBehaviour {
     // abstract - cant create an instance of this class, cant insentiate this class
 
+
+    public static event EventHandler OnAnyActionStarted; // for action camera
+    public static event EventHandler OnAnyActionCompleted; // for action camera
+
+
     // classes that extend this extend can access - protected
     protected Unit unit;
     protected bool isActive;
@@ -22,7 +27,7 @@ public abstract class BaseAction : MonoBehaviour {
     public abstract string GetActionName(); // abstract must have this function
 
 
-    public abstract void TakeAction(GridPosition gridPostion, Action onActionComplete);
+    public abstract void TakeAction(GridPosition gridPosition, Action onActionComplete);
 
     public virtual bool IsValidActionGridPosition(GridPosition gridPosition) {
         List<GridPosition> validGridPositionList = GetValidActionGridPositionList();
@@ -40,10 +45,20 @@ public abstract class BaseAction : MonoBehaviour {
     protected void ActionStart(Action onActionComplete) {
         isActive = true;
         this.onActionComplete = onActionComplete;
+
+        OnAnyActionStarted?.Invoke(this, EventArgs.Empty); // for action camera
     }
 
     protected void ActionComplete() {
         isActive = false;
         onActionComplete();
+
+        OnAnyActionCompleted?.Invoke(this, EventArgs.Empty); // for action camera
+    }
+
+
+
+    public Unit GetUnit() {
+        return unit;
     }
 }

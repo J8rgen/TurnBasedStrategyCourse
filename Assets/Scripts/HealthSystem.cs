@@ -32,9 +32,7 @@ public class HealthSystem : MonoBehaviour {
             Die();
         }
 
-
-        Debug.Log(health);
-
+        //Debug.Log(health);
     }
 
     private void Die() {
@@ -42,7 +40,7 @@ public class HealthSystem : MonoBehaviour {
     }
 
     public float GetHealthNormalized() {
-        // because we have both 'int' valuse
+        // because we have both 'int' values
         return (float)health / healthMax;
     }
 
