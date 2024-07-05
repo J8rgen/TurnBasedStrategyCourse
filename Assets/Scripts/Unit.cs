@@ -23,6 +23,9 @@ public class Unit : MonoBehaviour {
     // gets fired when any instance of this class does something
     public static event EventHandler OnAnyActionPointsChanged; // static - for whole class
 
+    public static event EventHandler OnAnyUnitSpawned;
+    public static event EventHandler OnAnyUnitDead;
+
 
 
 
@@ -39,6 +42,8 @@ public class Unit : MonoBehaviour {
 
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
         healthSystem.OnDead += HealthSystem_OnDead;
+
+        OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty); // when a unit spawns
     }
 
     
@@ -135,5 +140,7 @@ public class Unit : MonoBehaviour {
         LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this); // remove the unit from grid position
         Destroy(gameObject);
         // also had to unsubscribe to the UnitActionSystem_OnSelectedUnitChanged; event on UnitSelectedVisual.cs
+
+        OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
     }
 }
