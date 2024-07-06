@@ -103,7 +103,7 @@ public class UnitActionSystem : MonoBehaviour {
 
                 if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit)) { // tries to find the component 
                     if (unit == selectedUnit) {
-                        // Unit is alreay selected
+                        // Unit is already selected
                         return false;
                     }
 
@@ -130,9 +130,9 @@ public class UnitActionSystem : MonoBehaviour {
 
     private void SetSelectedUnit(Unit unit) {
         selectedUnit = unit;
-        SetSelectedAction(unit.GetMoveAction()); // default to move actioon when change unit
+        SetSelectedAction(unit.GetMoveAction()); // default to move action when change unit
 
-        OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);//if (OnSelectedUnitChanged != null){OnSelectedUnitChanged(this, EventArgs.Empty);}
+        OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty); // if (OnSelectedUnitChanged != null){OnSelectedUnitChanged(this, EventArgs.Empty);}
 
     }
 

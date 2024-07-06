@@ -15,6 +15,7 @@ public class Unit : MonoBehaviour {
 
     private MoveAction moveAction;
     private SpinAction spinAction;
+    private ShootAction shootAction;
     private BaseAction[] baseActionArray;
 
     private HealthSystem healthSystem;
@@ -33,6 +34,7 @@ public class Unit : MonoBehaviour {
         healthSystem = GetComponent<HealthSystem>();
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
+        shootAction = GetComponent<ShootAction>();
         baseActionArray = GetComponents<BaseAction>(); // includes all actions
     }
     private void Start() {
@@ -66,6 +68,10 @@ public class Unit : MonoBehaviour {
 
     public SpinAction GetSpinAction() {
         return spinAction;
+    }
+
+    public ShootAction GetShootAction() {
+        return shootAction;
     }
 
 
@@ -143,4 +149,18 @@ public class Unit : MonoBehaviour {
 
         OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
     }
+
+    public float GetHealthNormalized() {
+        return healthSystem.GetHealthNormalized();
+    }
+
+
+
+
+
+
+
+
+
+
 }

@@ -89,18 +89,40 @@ public class EnemyAI : MonoBehaviour {
     }
 
     private bool TryTakeEnemyAIAction(Unit enemyUnit, Action onEnemyAIActionComplete) {
-        SpinAction spinAction = enemyUnit.GetSpinAction();
 
-        GridPosition actionGridPosition = enemyUnit.GetGridPosition();
+        EnemyAIAction bestEnemyAIAction = null; 
+        BaseAction bestBaseAction = null;
 
-        if (!spinAction.IsValidActionGridPosition(actionGridPosition)) { // right grid for action
-            return false; // cant take action
+        // cycle all enemyAI actions and find if we can take any (take the best)
+        foreach (BaseAction baseAction in enemyUnit.GetBaseActionArray()) {
+
+            // can we take a action
+            if (!enemyUnit.CanSpendActionPointsToTakeAction(baseAction)) {
+                //Enemy cannot afford this action
+                continue; // try another
+            }
+
+            // take the best action
+            if (bestEnemyAIAction == null) {
+                bestEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                bestBaseAction = baseAction;
+            } else { // we already have the best action
+                EnemyAIAction testEnemyAIAction = baseAction.GetBestEnemyAIAction();
+                if (testEnemyAIAction != null && testEnemyAIAction.actionValue > bestEnemyAIAction.actionValue) {
+                    bestEnemyAIAction = testEnemyAIAction;
+                    bestBaseAction = baseAction;
+                }
+            }
+
         }
-        if (!enemyUnit.TrySpendActionPointsToTakeAction(spinAction)) { // has enough actionPonts for action
-            return false; // cant take action
+
+        if (bestEnemyAIAction != null && enemyUnit.TrySpendActionPointsToTakeAction(bestBaseAction)) {
+            bestBaseAction.TakeAction(bestEnemyAIAction.gridPosition, onEnemyAIActionComplete);
+            return true;
         }
-        spinAction.TakeAction(actionGridPosition, onEnemyAIActionComplete);
-        return true; // can take action
+        else {
+            return false;
+        }
     }
 
 

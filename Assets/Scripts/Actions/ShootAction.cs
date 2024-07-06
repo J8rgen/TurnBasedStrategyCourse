@@ -88,10 +88,15 @@ public class ShootAction : BaseAction {
         return "Shoot";
     }
 
-    public override List<GridPosition> GetValidActionGridPositionList() {
-        List<GridPosition> validGridPositionList = new List<GridPosition>();
 
+    public override List<GridPosition> GetValidActionGridPositionList() { 
         GridPosition unitGridPosition = unit.GetGridPosition();
+        return GetValidActionGridPositionList(unitGridPosition);
+    }
+
+    // Can pass in any gridPosition and will get valid targets around that grid position
+    public List<GridPosition> GetValidActionGridPositionList(GridPosition unitGridPosition) {
+        List<GridPosition> validGridPositionList = new List<GridPosition>();
 
         // cycle all positions in maximum range
         for (int x = -maxShootDistance; x <= maxShootDistance; x++) {
@@ -132,6 +137,7 @@ public class ShootAction : BaseAction {
         return validGridPositionList;
     }
 
+
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete) {
         
 
@@ -157,4 +163,26 @@ public class ShootAction : BaseAction {
     public int GetMaxShootDistance() {
         return maxShootDistance;
     }
+
+
+
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition) {
+
+        Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition); 
+
+
+        return new EnemyAIAction() {
+            gridPosition = gridPosition,
+
+            // priority for taking action
+            // shoot the enemy with the lowest health
+            actionValue = 100 + Mathf.RoundToInt((1 - targetUnit.GetHealthNormalized()) * 100f),
+        };
+    }
+
+    public int GetTargetCountAtGridPosition(GridPosition gridPosition) {
+        return GetValidActionGridPositionList(gridPosition).Count;
+    }
+
+
 }
