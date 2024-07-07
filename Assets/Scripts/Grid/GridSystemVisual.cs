@@ -81,7 +81,7 @@ public class GridSystemVisual : MonoBehaviour {
 
                 GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
 
-                if (!LevelGrid.Instance.isValidGridPosition(testGridPosition)) {
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) {
                     // is in grid bounds
                     continue;
                 }

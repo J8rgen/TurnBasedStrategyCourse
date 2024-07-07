@@ -13,9 +13,9 @@ public class Unit : MonoBehaviour {
 
     private GridPosition gridPosition; // Current grid position of the unit
 
-    private MoveAction moveAction;
-    private SpinAction spinAction;
-    private ShootAction shootAction;
+    //private MoveAction moveAction;
+    //private SpinAction spinAction;
+    //private ShootAction shootAction;
     private BaseAction[] baseActionArray;
 
     private HealthSystem healthSystem;
@@ -32,9 +32,9 @@ public class Unit : MonoBehaviour {
 
     private void Awake() {
         healthSystem = GetComponent<HealthSystem>();
-        moveAction = GetComponent<MoveAction>();
-        spinAction = GetComponent<SpinAction>();
-        shootAction = GetComponent<ShootAction>();
+        //moveAction = GetComponent<MoveAction>();
+        //spinAction = GetComponent<SpinAction>();
+        //shootAction = GetComponent<ShootAction>();
         baseActionArray = GetComponents<BaseAction>(); // includes all actions
     }
     private void Start() {
@@ -62,18 +62,17 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public MoveAction GetMoveAction() {
-        return moveAction;
-    }
-
-    public SpinAction GetSpinAction() {
-        return spinAction;
-    }
-
-    public ShootAction GetShootAction() {
-        return shootAction;
-    }
-
+    public T GetAction<T>() where T : BaseAction { // Generics
+        foreach (BaseAction baseAction in baseActionArray) {
+            if (baseAction is T) { // if is of type T 
+                return (T)baseAction; // return the baseAction
+            }
+        }
+        return null;
+    } // receive Type T , return type T, only receive where T extends BaseAction   replaced all these:
+    //public MoveAction GetMoveAction() {
+    //public SpinAction GetSpinAction() {
+    //public ShootAction GetShootAction() {
 
     public GridPosition GetGridPosition() { 
         return gridPosition; 
@@ -145,7 +144,7 @@ public class Unit : MonoBehaviour {
     private void HealthSystem_OnDead(object sender, EventArgs e) {
         LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this); // remove the unit from grid position
         Destroy(gameObject);
-        // also had to unsubscribe to the UnitActionSystem_OnSelectedUnitChanged; event on UnitSelectedVisual.cs
+        // also had to unSubscribe to the UnitActionSystem_OnSelectedUnitChanged; event on UnitSelectedVisual.cs
 
         OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
     }

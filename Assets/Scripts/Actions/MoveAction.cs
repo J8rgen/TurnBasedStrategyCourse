@@ -72,7 +72,7 @@ public class MoveAction : BaseAction {
                 GridPosition offsetGridPostion = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPostion;
 
-                if (!LevelGrid.Instance.isValidGridPosition(testGridPosition)) {
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) {
                     // is in grid bounds
                     continue;
                 }
@@ -109,7 +109,7 @@ public class MoveAction : BaseAction {
 
 
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition) {
-        int targetCountAtGridPosition = unit.GetShootAction().GetTargetCountAtGridPosition(gridPosition);
+        int targetCountAtGridPosition = unit.GetAction<ShootAction>().GetTargetCountAtGridPosition(gridPosition);
 
         return new EnemyAIAction() {
             gridPosition = gridPosition,

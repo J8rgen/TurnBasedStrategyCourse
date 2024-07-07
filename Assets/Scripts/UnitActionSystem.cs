@@ -130,7 +130,7 @@ public class UnitActionSystem : MonoBehaviour {
 
     private void SetSelectedUnit(Unit unit) {
         selectedUnit = unit;
-        SetSelectedAction(unit.GetMoveAction()); // default to move action when change unit
+        SetSelectedAction(unit.GetAction<MoveAction>()); // default to move action when change unit
 
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty); // if (OnSelectedUnitChanged != null){OnSelectedUnitChanged(this, EventArgs.Empty);}
 

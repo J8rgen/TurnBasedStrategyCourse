@@ -104,7 +104,7 @@ public class ShootAction : BaseAction {
                 GridPosition offsetGridPostion = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPostion;
 
-                if (!LevelGrid.Instance.isValidGridPosition(testGridPosition)) {
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) {
                     // is in grid bounds
                     continue;
                 }

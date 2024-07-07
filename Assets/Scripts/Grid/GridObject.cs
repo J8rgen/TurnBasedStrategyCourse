@@ -6,12 +6,12 @@ using UnityEngine;
  * provides methods to add and remove units and to get the list of units in the cell*/
 public class GridObject {
 
-    private GridSystem gridSystem;
+    private GridSystem<GridObject> gridSystem;
     private GridPosition gridPosition;
     private List<Unit> unitList;
 
     // Constructor to initialize the GridObject (single cell)
-    public GridObject(GridSystem gridSystem, GridPosition gridPosition) {
+    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition) {
         this.gridSystem = gridSystem;
         this.gridPosition = gridPosition;
         unitList = new List<Unit>();

@@ -8,18 +8,20 @@ using TMPro; // textmeshpro
  * showing the position and units present. */
 
 public class GridDebugObject : MonoBehaviour {
+    //PathfindingGridDebugObject extends this
 
     [SerializeField] private TextMeshPro textMeshPro; // Text component for displaying grid info
 
 
-    private GridObject gridObject; // Reference to the GridObject this debug object represents
+    private object gridObject;
 
-    public void SetGridObject(GridObject gridObject) { // Set the GridObject for this debug object
+    public virtual void SetGridObject(object gridObject) { // Set the GridObject for this debug object
         this.gridObject = gridObject;
     }
 
-    private void Update() {
-        textMeshPro.text = gridObject.ToString(); // we overrite toString in gridObject
+    protected virtual void Update() {
+        textMeshPro.text = gridObject.ToString(); 
     }
+
     
 }

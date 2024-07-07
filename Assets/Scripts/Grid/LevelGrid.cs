@@ -14,7 +14,7 @@ public class LevelGrid : MonoBehaviour {
 
     [SerializeField] private Transform gridDebugObjectPrefab;
 
-    private GridSystem gridSystem; // Reference to the GridSystem instance
+    private GridSystem<GridObject> gridSystem; // Reference to the GridSystem instance
 
 
     private void Awake() {
@@ -25,8 +25,9 @@ public class LevelGrid : MonoBehaviour {
         }
         Instance = this;
 
-        gridSystem = new GridSystem(10, 10, 2f); // Initialize grid system with width, height, and cell size
-        gridSystem.CreateDebugObjects(gridDebugObjectPrefab); // Create debug objects for visualization (grid, texts)
+        gridSystem = new GridSystem<GridObject>(10, 10, 2f, 
+            (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition)); // Initialize grid system with width, height, and cell size
+        //gridSystem.CreateDebugObjects(gridDebugObjectPrefab); // Create debug objects for visualization (grid, texts)
     }
 
     // Add a unit to a specific grid position
@@ -62,7 +63,7 @@ public class LevelGrid : MonoBehaviour {
     // Short for closing brackets Lambda expression  Same as:
     // public GridPosition GetGridPosition(Vector3 worldPosition){ return gridSystem.GetGridPosition(worldPosition); }
 
-    public bool isValidGridPosition(GridPosition gridPosition) => gridSystem.isValidGridPosition(gridPosition); // Lambda expression 
+    public bool IsValidGridPosition(GridPosition gridPosition) => gridSystem.IsValidGridPosition(gridPosition); // Lambda expression 
 
     public Vector3 GetWorldPosition(GridPosition gridPosition) => gridSystem.GetWorldPosition(gridPosition);
 
