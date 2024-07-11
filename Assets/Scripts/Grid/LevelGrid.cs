@@ -14,6 +14,10 @@ public class LevelGrid : MonoBehaviour {
 
     [SerializeField] private Transform gridDebugObjectPrefab;
 
+    [SerializeField] private int width;
+    [SerializeField] private int height;
+    [SerializeField] private float cellSize;
+
     private GridSystem<GridObject> gridSystem; // Reference to the GridSystem instance
 
 
@@ -25,10 +29,15 @@ public class LevelGrid : MonoBehaviour {
         }
         Instance = this;
 
-        gridSystem = new GridSystem<GridObject>(10, 10, 2f, 
+        gridSystem = new GridSystem<GridObject>(width, height, cellSize, 
             (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition)); // Initialize grid system with width, height, and cell size
         //gridSystem.CreateDebugObjects(gridDebugObjectPrefab); // Create debug objects for visualization (grid, texts)
     }
+
+    private void Start() {
+        Pathfinding.Instance.Setup(width, height, cellSize);
+    }
+
 
     // Add a unit to a specific grid position
     public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit) {
