@@ -540,6 +540,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ac14cafcfa3bf6409c93a31ea20b240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obsataclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &8420749142926651839
 MonoBehaviour:
   m_ObjectHideFlags: 0

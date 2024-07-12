@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class ShootAction : BaseAction {
 
+    [SerializeField] private LayerMask obsataclesLayerMask;
+
     public event EventHandler<OnShootEventArgs> OnShoot;
 
     public class OnShootEventArgs : EventArgs {
@@ -126,6 +128,21 @@ public class ShootAction : BaseAction {
 
                 if (targetUnit.IsEnemy() == unit.IsEnemy()) { 
                     // Both units are on the same team (IsEnemy boolean == for both)
+                    continue;
+                }
+
+                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                Vector3 shootDir = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+                
+                float unitShoulderHeight = 1.7f;
+
+                if (Physics.Raycast(
+                    unitWorldPosition + Vector3.up * unitShoulderHeight, // offset origin position
+                    shootDir, // shoot direction
+                    Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()), // max distance
+                    obsataclesLayerMask)) {
+
+                    // if layer mask hits something -> blocked by an obstacle
                     continue;
                 }
 

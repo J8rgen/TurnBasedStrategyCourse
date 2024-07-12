@@ -13,22 +13,26 @@ public class MoveAction : BaseAction {
 
     //private const string IS_WALKING = "IsWalking";
 
-    private Vector3 targetPosition; // Target position for movement
+    private List<Vector3> positionList; // Target position for movement
+    private int currentPositionIndex;
 
-    protected override void Awake() {
-        base.Awake();
-        targetPosition = transform.position;  // Set initial target position to current position (so units dont move on start)
-    }
 
     private void Update() {
         if (!isActive) {
             return;
         }
 
-        float stoppingDistance = .1f; // Distance at which the unit can stop moving, otherwise will keep trying to correct the distance
 
+        Vector3 targetPosition = positionList[currentPositionIndex]; // current target position
         Vector3 moveDirection = (targetPosition - transform.position).normalized; // target - current position (move direction vector)
 
+        // Rotate before moving
+        float rotateSpeed = 10f; // Unit Rotation speed
+        transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
+        // unit rotation for movement, lerp for smoothing rotation
+
+        // Move
+        float stoppingDistance = .1f; // Distance at which the unit can stop moving, otherwise will keep trying to correct the distance
         // Move the unit towards the target position
         if (Vector3.Distance(transform.position, targetPosition) > stoppingDistance) {
 
@@ -36,14 +40,16 @@ public class MoveAction : BaseAction {
             transform.position += moveDirection * moveSpeed * Time.deltaTime; // framerate independent
 
         }
-        else {
-            OnStopMoving?.Invoke(this, EventArgs.Empty);
-            ActionComplete();
+        else { 
+            currentPositionIndex++;
+            if (currentPositionIndex >= positionList.Count) { // Reached the end
+                // no more positions to follow
+                OnStopMoving?.Invoke(this, EventArgs.Empty);
+                ActionComplete();
+            }
         }
 
-        float rotateSpeed = 10f; // Unit Rotation speed
-        transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
-        // unit rotation for movement, lerp for smoothing rotation
+        
     }
 
 
@@ -51,7 +57,17 @@ public class MoveAction : BaseAction {
     // Method to set a new target position for the unit
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete) {
 
-        this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition); // this object (the unit)
+        List<GridPosition> pathGridPositionList = Pathfinding.Instance.FindPath(unit.GetGridPosition(), gridPosition, out int pathLength);
+
+
+
+        currentPositionIndex = 0;
+        positionList = new List<Vector3>();
+
+        foreach (GridPosition pathGridPosition in pathGridPositionList) {
+            positionList.Add(LevelGrid.Instance.GetWorldPosition(pathGridPosition));
+        }
+
 
         OnStartMoving?.Invoke(this, EventArgs.Empty);
 
@@ -91,6 +107,22 @@ public class MoveAction : BaseAction {
                 }
                 if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) {
                     // Grid position already occupied with another unit
+                    continue;
+                }
+
+                // a wall or a blocked grid
+                if (!Pathfinding.Instance.isWalkableGridPosition(testGridPosition)) {
+                    continue;
+                }
+
+                //is there a path to a position (unreachable/ out of bounds)
+                if (!Pathfinding.Instance.HasPath(unitGridPosition, testGridPosition)) {
+                    continue;
+                }
+
+                int pathfindingDistanceMultiplier = 10; // because we multiplied the costs by 10 fcost and so on
+                if (Pathfinding.Instance.GetPathLength(unitGridPosition, testGridPosition) > maxMoveDistance * pathfindingDistanceMultiplier) {
+                    // Path length is too long
                     continue;
                 }
 
