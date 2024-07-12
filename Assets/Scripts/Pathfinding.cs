@@ -40,6 +40,8 @@ public class Pathfinding : MonoBehaviour {
         //need to be the same values as on LevelGrid
         gridSystem = new GridSystem<PathNode>(width, height, cellSize,
             (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
+
+        // CAN COMMENT THIS OUT SO WE DONT SEE DEBG OBJECTS
         gridSystem.CreateDebugObjects(gridDebugObjectPrefab); // Create debug objects
 
 
